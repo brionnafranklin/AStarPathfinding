@@ -16,13 +16,11 @@
 #include "WanderBehavior.h"
 #include "SeekBehavior.h"
 #include "PursuitBehavior.h"
-#include "FSM.h" 
-#include "IdleState.h"
-#include "EnemyAttackState.h"
 #include "WithinRangeCondition.h"
 #include "DecisionTreeBehavior.h"
 #include "BooleanDecision.h"
 #include "BehaviorDecision.h"
+#include "PatrolBehovior.h"
 
 int main()
 {
@@ -51,26 +49,7 @@ int main()
 	Agent* enemy = new Agent();
 	enemy->setPosition(Vector2{ 400.0f, 225.0f });
 	enemy->setSpeed(250.0f);
-	enemy->setColor(DARKBLUE);
-
-	//Create and add the enemy's FSM
-	FSM* enemyFSM = new FSM();
-	//enemy->addBehavior(enemyFSM);
-	//Create and add the idle state
-	IdleState* idleState = new IdleState();
-	enemyFSM->addState(idleState);
-	//Create and add the attack state
-	EnemyAttackState* attackState = new EnemyAttackState(player, 250.0f);
-	enemyFSM->addState(attackState);
-	//Create and add the condition
-	Condition* withinRangeCondition = new WithinRangeCondition(player, 200.0f);
-	enemyFSM->addCondition(withinRangeCondition);
-	//Create and add the transition
-	Transition* toAttackTransition = new Transition(attackState, withinRangeCondition);
-	enemyFSM->addTransition(toAttackTransition);
-	idleState->addTransitions(toAttackTransition);
-	//Set current state to idle
-	enemyFSM->setCurrentState(idleState);
+	enemy->setColor(RED);
 
 	//Leaves
 	WanderBehavior* wanderBehavior = new WanderBehavior();
@@ -82,19 +61,15 @@ int main()
 	pursuitBehavior->setTarget(player);
 	BehaviorDecision* pursuitDecision = new BehaviorDecision(pursuitBehavior);
 	//Branches
-	WithinRangeCondition* canSeeCondition = new WithinRangeCondition(player, 250);
+	WithinRangeCondition* canSeeCondition = new WithinRangeCondition(player, 150);
 	BooleanDecision* canSeeDecision = new BooleanDecision(pursuitDecision, seekDecision, canSeeCondition);
-	WithinRangeCondition* canHearCondition = new WithinRangeCondition(player, 500);
+	WithinRangeCondition* canHearCondition = new WithinRangeCondition(player, 300);
 	BooleanDecision* canHearDecision = new BooleanDecision(canSeeDecision, wanderDecision, canHearCondition);
 	//Enemy decision tree
 	DecisionTreeBehavior* enemyDecisionTree = new DecisionTreeBehavior(canHearDecision);
 	enemy->addBehavior(enemyDecisionTree);
 	enemy->addBehavior(screenEdgeBehavior);
 	
-	//MoveToTargetDecision* chaseDecision = new MoveToTargetDecision(player, 500.0f);
-	//Condition* inSightCondition = new WithinRangeCondition(player, 1000.0f);
-	//BooleanDecision* inSightDecision = new BooleanDecision()
-	//DecisionBehavior* enemyDecisionTree = new DecisionBehavior()
 	//--------------------------------------------------------------------------------------
 
 	// Main game loop

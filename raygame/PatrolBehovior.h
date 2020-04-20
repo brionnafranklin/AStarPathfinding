@@ -1,11 +1,12 @@
 #pragma once
 #include "Behavior.h"
-
-class EvadeBehavior : public Behavior
+#include "AStar.h"
+class PatrolBehovior : public Behavior
 {
 public:
-	EvadeBehavior() {}
-	virtual ~EvadeBehavior() {}
+
+	PatrolBehovior() {};
+	virtual ~PatrolBehovior() {};
 
 	virtual void update(Agent* agent, float deltaTime);
 	void setTarget(Agent* agent) { m_target = agent; }
@@ -13,3 +14,4 @@ public:
 private:
 	Agent* m_target = nullptr;
 };
+

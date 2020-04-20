@@ -1,5 +1,5 @@
 #pragma once
-#include "NodeAgent.h"
+#include "Agent.h"
 #include<vector>
 #include<raylib.h>
 
@@ -10,8 +10,8 @@ public:
 	AStar();
 	~AStar();
 
-	std::vector<NodeAgent*> AStarSearch(NodeAgent* startNode, NodeAgent* endNode);
-	float heuristic(NodeAgent* target, NodeAgent* endNode);
+	std::vector<Agent*> AStarSearch(Agent* startNode, Agent* endNode);
+	float heuristic(Agent* target, Agent* endNode);
 private:
 
 };
